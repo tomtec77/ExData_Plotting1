@@ -24,20 +24,39 @@ png(filename="plot4.png",
 # datetime (for three different sub meterings) and global reactive power as a
 # function of datetime
 
-# First we initialise the plot
-with(df, plot(Datetime, Sub_metering_1, type="n",
-              xlab="",
-              ylab="Energy sub metering"))
-
-# Now add the three columns to plot
+# Colours for the third plot
 line.colours <- c("black", "red", "blue")
-with(df, lines(Datetime, Sub_metering_1, col=line.colours[1]))
-with(df, lines(Datetime, Sub_metering_2, col=line.colours[2]))
-with(df, lines(Datetime, Sub_metering_3, col=line.colours[3]))
 
-# Finally, add a legend
-legend("topright", col=line.colours, lty=1,
-       legend=c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"))
+# First we initialise the plot
+par(mfrow=c(2,2))
+with(df, {
+    # First plot (top left)
+    plot(Datetime, Global_active_power, type="l",
+              xlab="",
+              ylab="Global Active Power")
+    
+    # Second plot (top right)
+    plot(Datetime, Voltage, type="l",
+         xlab="datetime",
+         ylab="Voltage")
+    
+    # Third plot (bottom left)
+    plot(Datetime, Sub_metering_1, type="n",
+                  xlab="",
+                  ylab="Energy sub metering")
+    lines(Datetime, Sub_metering_1, col=line.colours[1])
+    lines(Datetime, Sub_metering_2, col=line.colours[2])
+    lines(Datetime, Sub_metering_3, col=line.colours[3])
+    legend("topright", col=line.colours, lty=1, bty="n",
+           legend=c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"))
+    
+    # Fourth plot (bottom right)
+    # The plot to reproduce looks like it has both lines and points, so I'm
+    # doing the same here
+    plot(Datetime, Global_reactive_power, type="l",
+         xlab="datetime")
+    points(Datetime, Global_reactive_power, pch=20, cex=0.25)
+})
 
 # Close the graphics device
 dev.off()
